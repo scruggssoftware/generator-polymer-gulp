@@ -1,0 +1,29 @@
+<!--
+<%= componentDescription %>.
+
+##### Example
+
+    <<%= _.slugify(componentName) %>></<%= _.slugify(componentName) %>>
+
+@element <%= _.slugify(componentName) %>
+@blurb <%= componentDescription %>
+@status alpha
+@homepage <%= componentPage %>
+-->
+<polymer-element name="<%= _.slugify(componentName) %>" attributes="notitle">
+
+  <template>
+
+    <!-- build:css styles/<%= _.slugify(componentName) %>.min.css -->
+    <link rel="stylesheet" href="styles/<%= _.slugify(componentName) %>.css" />
+    <!-- endbuild -->
+
+    <content></content>
+
+  </template>
+
+    <!-- build:js scripts/<%= _.slugify(componentName) %>.min.js -->
+    <script src="scripts/<%= _.slugify(componentName) %>.js" />
+    <!-- endbuild -->
+
+</polymer-element>

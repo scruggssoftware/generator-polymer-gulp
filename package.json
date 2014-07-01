@@ -1,31 +1,47 @@
 {
   "name": "generator-polymer-gulp",
-  "version": "0.0.0",
-  "description": "Yeoman generator",
-  "license": "MIT",
+  "version": "0.1.1",
+  "description": "A Yeoman generator for Polymer projects using Gulp",
+  "licenses": [
+    {
+      "type": "Apache-2.0"
+    }
+  ],
   "main": "app/index.js",
-  "repository": "NicoArbogast/generator-polymer-gulp",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/NicoArbogast/generator-polymer-gulp.git"
+  },
+  "homepage": "https://github.com/NicoArbogast/generator-polymer-gulp",
+  "bugs": "https://github.com/NicoArbogast/generator-polymer-gulp/issues",
   "author": {
     "name": "NicoArbogast",
     "email": "nico@rboga.st",
     "url": "https://github.com/NicoArbogast"
   },
   "engines": {
-    "node": ">=0.10.0"
+    "node": ">=0.10.0",
+    "npm": ">=1.3.8"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha --reporter spec"
   },
   "files": [
-    "app"
+    "app",
+    "test"
   ],
   "keywords": [
-    "yeoman-generator"
+    "yeoman-generator",
+    "gulp",
+    "polymer",
+    "web",
+    "app",
+    "front-end"
   ],
   "dependencies": {
     "yeoman-generator": "~0.16.0",
     "chalk": "~0.4.0",
-    "yosay": "^0.1.0"
+    "yosay": "^0.3.0"
   },
   "devDependencies": {
     "mocha": "*"

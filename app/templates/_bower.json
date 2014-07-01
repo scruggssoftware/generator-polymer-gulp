@@ -1,6 +1,12 @@
 {
-  "name": "package",
+  "name": "<%= _.slugify(componentName) %>",
+  "description": "<%= _.slugify(componentDescription) %>",
   "version": "0.0.0",
-  "dependencies": {}
+  "dependencies": {
+    "platform": "Polymer/platform#~0.3.3",
+    "polymer": "Polymer/polymer#~0.3.3"
+  },
+  "devDependencies": {
+    "closure-compiler" : "http://dl.google.com/closure-compiler/compiler-latest.zip"
+  }
 }
-
