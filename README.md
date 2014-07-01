@@ -26,22 +26,27 @@ This project uses
 ## Getting Started
 
 Install:
-```npm install -g generator-polymer-gulp```
+
+    npm install -g generator-polymer-gulp
 
 Make a new dir && cd into it:
-```mkdir my-polymer-component && cd $_```
+
+    mkdir my-polymer-component && cd $_
 
 Scaffold a new Polymer component:
-```yo polymer-gulp```
+
+    yo polymer-gulp
 
 Launch a dev web server watching dev files with live reload:
-```gulp serve```
+
+    gulp serve
 
 Build all assets for production and distribution:
-```gulp build```
+
+    gulp build
 
 Clean / Rebuild everything:
-```gulp```
+    gulp
 
 ## Folders structure
 
