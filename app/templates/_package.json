@@ -6,7 +6,7 @@
     "browser-sync": "^1.1.2",
     "glob": "^4.0.2",
     "gulp": "^3.6.0",
-    "orchestrator": "0.3.3",
+    "orchestrator": "0.3.6",
     "gulp-autoprefixer": "^0.0.7",
     "gulp-browserify": "^0.5.0",
     "gulp-bower-files": "^0.2.5",
