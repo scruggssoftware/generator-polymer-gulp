@@ -1,6 +1,6 @@
 {
   "name": "<%= _.slugify(componentName) %>",
-  "description": "<%= _.slugify(componentDescription) %>",
+  "description": "<%= componentDescription %>",
   "version": "0.0.0",
   "dependencies": {
     "platform": "Polymer/platform#~0.3.3",
