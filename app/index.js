@@ -82,6 +82,7 @@ var PolymerGulpGenerator = yeoman.generators.Base.extend({
     var componentRootDir = srcDir + '/';
     this.mkdir(componentRootDir + 'scripts');
     this.mkdir(componentRootDir + 'images');
+    this.mkdir(componentRootDir + 'public');
     this.mkdir(componentRootDir + 'styles');
 
     var copyToComponentRootDir = function(arrayOfArrays){
