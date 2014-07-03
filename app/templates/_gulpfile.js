@@ -157,6 +157,44 @@ var sizeOf = function(stream, title){
 })(this);
 
 // --------------------------------------------------------
+// Build Public folder
+// --------------------------------------------------------
+
+(function(scope){
+
+  gulp.task('public:dev', function () {
+    return sizeOf(publicSymlink()
+      , 'public:dev');
+  });
+
+  gulp.task('p-public:dev:reload', function () {
+    return sizeOf(publicSymlink()
+      .pipe(reload({stream: true, once: true}))
+      , 'public:dev');
+  });
+
+  gulp.task('public:package', function () {
+    return sizeOf(publicPackage()
+      , 'public:package');
+  });
+
+  var publicSymlink = function () {
+    return gulp.src('app/public/**/*')
+        .pipe($.symlink(tmpDir + '/public'));
+  }.bind(scope);;
+
+  var publicPackage = function () {
+    return gulp.src('app/public/**/*')
+        .pipe($.cache($.imagemin({
+            progressive: true,
+            interlaced: true
+        })))
+        .pipe(gulp.dest(distDir + '/public'));
+  }.bind(scope);
+
+})(this);
+
+// --------------------------------------------------------
 // Build Css
 // --------------------------------------------------------
 
@@ -244,7 +282,7 @@ var sizeOf = function(stream, title){
     return htmlDev();
   });
 
-  gulp.task('p-html:dev:reload', ['p-images:dev:reload'], function(){
+  gulp.task('p-html:dev:reload', ['p-images:dev:reload', 'p-public:dev:reload'], function(){
     return htmlDev()
       .pipe(reload({stream: true, once: true}));
   });
@@ -309,12 +347,12 @@ var sizeOf = function(stream, title){
       .pipe($.size({title: 'html'}));
   });
 
-  gulp.task('p-assets:prepare:dev', [ 'html:dev', 'styles:dev', 'images:dev', 'lib:dev',
+  gulp.task('p-assets:prepare:dev', [ 'html:dev', 'styles:dev', 'images:dev', 'public:dev', 'lib:dev',
     'scripts:dev' ],
     function(){ return true; }
   );
 
-  gulp.task('p-assets:prepare:package', [ 'html:dev', 'styles:dev', 'images:dev', 'lib:dev',
+  gulp.task('p-assets:prepare:package', [ 'html:dev', 'styles:dev', 'images:dev', 'public:dev', 'lib:dev',
     'p-scripts:pre:package' ], function(){
     return gulp.start('p-scripts:pre:package');
   });
@@ -360,6 +398,7 @@ var sizeOf = function(stream, title){
       gulp.watch(['app/styles/**/*.{css,scss,sass}']          , ['p-styles:dev:reload']);
       gulp.watch(['app/scripts/**/*.js']                      , ['p-scripts:dev:reload']);
       gulp.watch(['app/images/**/*.*']                        , ['p-images:dev:reload']);
+      gulp.watch(['app/public/**/*.*']                        , ['p-public:dev:reload']);
       gulp.watch(['lib/.bower_components/**/*.{css,js,html}'] , ['p-lib:dev:reload']);
   });
 
