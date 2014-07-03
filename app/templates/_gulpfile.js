@@ -213,7 +213,7 @@ var sizeOf = function(stream, title){
 })(this);
 
 // --------------------------------------------------------
-// Send bower_components to lib
+// Send external libs to lib
 // --------------------------------------------------------
 
 (function(scope){
@@ -228,7 +228,7 @@ var sizeOf = function(stream, title){
 
   var copyBowerComponentsToLib = function(env){
     var dest = env === 'dev' ? tmpDir : distDir;
-    return gulp.src('lib/.bower_components/**/*.{css,js,html}*')
+    return gulp.src('lib/**/*.{css,js,html}*')
       .pipe(gulp.dest(dest + '/lib'));
   }.bind(scope);
 
