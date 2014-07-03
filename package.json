@@ -1,6 +1,6 @@
 {
   "name": "generator-polymer-gulp",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "A Yeoman generator for Polymer projects using Gulp",
   "licenses": [
     {
