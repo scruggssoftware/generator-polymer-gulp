@@ -185,10 +185,6 @@ var sizeOf = function(stream, title){
 
   var publicPackage = function () {
     return gulp.src('app/public/**/*')
-        .pipe($.cache($.imagemin({
-            progressive: true,
-            interlaced: true
-        })))
         .pipe(gulp.dest(distDir + '/public'));
   }.bind(scope);
 
@@ -435,7 +431,7 @@ var sizeOf = function(stream, title){
 // --------------------------------------------------------
 (function(scope){
 
-  var destDir = vulcanizedDir + '/';
+  var destDir = distDir + '/' + vulcanizedDir + '/';
 
   gulp.task('vulcanize', ['clean:vulcanizedDir'], function (cb) {
     runSequence('vulcanize:inline', 'vulcanize:cspAndBase', cb)
