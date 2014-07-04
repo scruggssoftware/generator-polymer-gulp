@@ -410,6 +410,7 @@ var sizeOf = function(stream, title){
     'p-styles:package:now',
     'p-scripts:package:now',
     'images:package',
+    'public:package',
     'lib:package'
   ]
 
