@@ -57,9 +57,9 @@ At bootstrap your working directory contains
 
 The build cycle will later create
 
-* \_tmp/         : the app build for development (js browserifyd, css sassed)
-* \_dist/        : the app built for production (js compiled, css uncssd, html minified)
-* \_vulcanized/  : your polymer component built for distribution (csp, inline, raw)
+* \_tmp/               : the app build for development (js browserifyd, css sassed)
+* \_dist/              : the app built for production (js compiled, css uncssd, html minified)
+* \_dist/_vulcanized/  : your polymer component built for distribution (csp, inline, raw)
 
 ## Options
 
