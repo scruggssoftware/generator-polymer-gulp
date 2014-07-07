@@ -78,12 +78,18 @@ var sizeOf = function(stream, title){
       }
     })
 
-    return gulp.src(jsBundles)
-      .pipe($.stripDebug())
-      .pipe($.tap(function(file,t){gulpClosureCompile(file,t)}))
-      .pipe(gulp.dest(distDir + '/scripts'))
-      .pipe($.zopfli())
-      .pipe(gulp.dest(distDir + '/scripts'))
+    for(var i=0;i<jsBundles.length;i++){
+      // FIXME
+      // inelegant way of returning something
+      // for run-sequence - we return the last one
+      // as we want to iterate over each found path
+      // to retrieve filename and pass it to closure compiler
+      if(i<jsBundles-1){
+        compileJS(jsBundles[i]);
+      }else{
+        return compileJS(jsBundles[i]);
+      }
+    }
   });
 
   var scriptsBrowserify = function(env){
@@ -107,13 +113,21 @@ var sizeOf = function(stream, title){
       .pipe(gulp.dest(tmpDir + '/scripts'))
   }.bind(scope);
 
-  var gulpClosureCompile = function(file, t){
-    var currentFilename = path.basename(file.path, path.extname(file.path));
-    return t.through($.closureCompiler, [{
-      compilerPath    : 'lib/.bower_components/closure-compiler/compiler.jar',
-      fileName        : currentFilename + '.js',
-      compilerFlags   : { warning_level : 'QUIET' }
-    }]);
+  var compileJS = function(filepath){
+    var currentFilename = path.basename(filepath, path.extname(filepath));
+    return gulp.src(filepath)
+      .pipe($.stripDebug())
+      .pipe($.closureCompiler({
+        compilerPath    : 'lib/.bower_components/closure-compiler/compiler.jar',
+        fileName        : currentFilename + '.js',
+        compilerFlags   : {
+          warning_level : 'QUIET'
+          //, language_in      : 'ECMASCRIPT5_STRICT'
+        }
+      }))
+      .pipe(gulp.dest(distDir + '/scripts'))
+      .pipe($.zopfli())
+      .pipe(gulp.dest(distDir + '/scripts'))
   }.bind(scope);
 
 })(this);
@@ -322,6 +336,7 @@ var sizeOf = function(stream, title){
       arguments[0] || 'p-dummy-do:nothing',
       arguments[1] || 'p-dummy-do:nothing',
       arguments[2] || 'p-dummy-do:nothing',
+      arguments[3] || 'p-dummy-do:nothing',
       function(){
         return gulp.start('p-assets:prepare:dev');
       }
@@ -401,10 +416,14 @@ var sizeOf = function(stream, title){
 })(this);
 
 // --------------------------------------------------------
-// Build Production Files
+// Build Prod files & Vulcanized Polymer
 // --------------------------------------------------------
 
 (function(scope){
+
+  gulp.task('default', ['clean'], function () {
+    runSequence('vulcanize');
+  });
 
   var assetsPackageTasks = [
     'p-styles:package:now',
@@ -412,34 +431,28 @@ var sizeOf = function(stream, title){
     'images:package',
     'public:package',
     'lib:package'
-  ]
-
-  gulp.task('build', ['clean:distDir'], function () {
-    scope.htmlPackage(
-      assetsPackageTasks,
-      'vulcanize'
-    );
-  });
-
-  gulp.task('default', ['clean'], function () {
-    runSequence('build');
-  });
-
-})(this);
-
-// --------------------------------------------------------
-// Build Vulcanized Polymer
-// --------------------------------------------------------
-(function(scope){
+  ];
 
   var destDir = distDir + '/' + vulcanizedDir + '/';
 
-  gulp.task('vulcanize', ['clean:vulcanizedDir'], function (cb) {
-    runSequence('vulcanize:inline', 'vulcanize:cspAndBase', cb)
+  gulp.task('vulcanize', ['clean:vulcanizedDir'], function () {
+    return scope.htmlPackage(
+      assetsPackageTasks,
+      'vulcanize:inline:now',
+      'vulcanize:base:now',
+      'vulcanize:csp:now'
+    );
   });
 
   // vulcanize in inline mode
   gulp.task('vulcanize:inline',function(){
+    return scope.htmlPackage(
+      assetsPackageTasks,
+      'vulcanize:inline:now'
+    );
+  });
+
+  gulp.task('vulcanize:inline:now',function(){
     return gulp.src(distDir + '/<%= _.slugify(componentName) %>.html', {base: distDir + '/'})
       .pipe($.vulcanize({
         dest: destDir + 'inline/',
@@ -449,7 +462,10 @@ var sizeOf = function(stream, title){
 
   // vulcanize in csp mode
   gulp.task('vulcanize:csp',function(){
-    return scope.htmlPackage('vulcanize:csp:now');
+    return scope.htmlPackage(
+      assetsPackageTasks,
+      'vulcanize:csp:now'
+    );
   });
 
   gulp.task('vulcanize:csp:now', function(){
@@ -461,7 +477,10 @@ var sizeOf = function(stream, title){
 
   // vulcanize in standard mode
   gulp.task('vulcanize:base',function(){
-    return scope.htmlPackage('vulcanize:base:now');
+    return scope.htmlPackage(
+      assetsPackageTasks,
+      'vulcanize:base:now'
+    );
   });
 
   gulp.task('vulcanize:base:now', function(){
@@ -469,11 +488,6 @@ var sizeOf = function(stream, title){
       dest: destDir + 'raw/'
     });
   });
-
-  // vulcanize in csp + base mode
-  gulp.task('vulcanize:cspAndBase', function(){
-    return scope.htmlPackage('vulcanize:base:now', 'vulcanize:csp:now');
-  })
 
   var vulcanizeWithExternalScriptsAndStyles = function(vulcanizeOptions){
     return gulp.src(tmpDir + '/<%= _.slugify(componentName) %>.html')
