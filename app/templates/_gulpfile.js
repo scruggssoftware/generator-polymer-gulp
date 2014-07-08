@@ -256,6 +256,10 @@ var sizeOf = function(stream, title){
     return copyBowerComponentsToLib('dev')
   });
 
+  gulp.task('p-lib:dev:reload', function () {
+    return copyBowerComponentsToLib('dev').pipe(reload({stream: true, once: true}));
+  });
+
   gulp.task('lib:package', function () {
     return copyBowerComponentsToLib('prod')
   });
